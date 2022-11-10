@@ -3,16 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
+/*   By: tlarraze <tlarraze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/09 20:20:13 by zharzi            #+#    #+#             */
-/*   Updated: 2022/11/10 11:05:26 by zharzi           ###   ########.fr       */
+/*   Created: 2022/11/10 14:39:50 by tlarraze          #+#    #+#             */
+/*   Updated: 2022/11/10 14:57:55 by tlarraze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
-int	ft_test(void)
+int	main(void)
 {
-	return (1);
+	char	*str;
+
+	str = readline("Minishell:>");
+	printf("%s", str);
+	return (0);
 }

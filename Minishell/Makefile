@@ -3,12 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+         #
+#    By: tlarraze <tlarraze@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 17:12:24 by zharzi            #+#    #+#              #
-#    Updated: 2022/11/10 14:41:35 by zharzi           ###   ########.fr        #
+#    Updated: 2022/11/10 16:02:31 by tlarraze         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+BLUE=\033[4;96m
 
 NAME = libminishell.a
 
@@ -29,19 +31,22 @@ CC = clang
 
 FLAGS = -Wall -Wextra -Werror -g3
 
+LFLAGS = -L/usr/local/lib -I/usr/local/include -lreadline
+
 IFLAG = -I$(HEADERDIR) -Ift_printf/includes/ -Ilibft/includes/ -Ipipex/includes/
 
 all : libft.a libft_printf.a libpipex.a libminishell.a $(BINARY)
 
 $(BINARY):
-	$(CC) $(FLAGS) main.c $(IFLAG) -L. -lminishell -L./pipex -lpipex \
-		-L./libft -lft -L./ft_printf -lft_printf -o $(BINARY)
+	@$(CC) $(FLAGS) main.c $(IFLAG) -L. -lminishell -L./pipex -lpipex \
+		-L./libft -lft -L./ft_printf -lft_printf -o $(BINARY) $(LFLAGS)
+	@echo "${BLUE}***Compilation_Complete***"
 
 %.o : %.c
-	$(CC) $(FLAGS) $(IFLAG) -o $@ -c $^
+	@$(CC) $(FLAGS) $(IFLAG) -o $@ -c $^
 
 libminishell.a : $(OBJ) $(HEADERDIR)$(HEADER)
-	ar -rcs $(NAME) $^
+	@ar -rcs $(NAME) $^
 
 libft.a :
 	@${MAKE} -sC libft/
@@ -53,14 +58,14 @@ libpipex.a :
 	@${MAKE} -sC pipex/
 
 clean :
-	rm -f $(OBJ)
+	@rm -f $(OBJ)
 	@${MAKE} clean -sC libft/
 	@${MAKE} clean -sC ft_printf/
 	@${MAKE} clean -sC pipex/
 
 fclean : clean
-	rm -f $(NAME)
-	rm -f $(BINARY)
+	@rm -f $(NAME)
+	@rm -f $(BINARY)
 	@${MAKE} fclean -sC libft/
 	@${MAKE} fclean -sC ft_printf/
 	@${MAKE} fclean -sC pipex/

@@ -16,6 +16,12 @@
 # include "libft.h"
 # include "ft_printf.h"
 # include "pipex.h"
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 int	ft_test(void);
 /*
