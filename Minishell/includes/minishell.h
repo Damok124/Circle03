@@ -6,7 +6,7 @@
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 12:11:56 by zharzi            #+#    #+#             */
-/*   Updated: 2022/11/09 20:19:09 by zharzi           ###   ########.fr       */
+/*   Updated: 2022/11/10 14:27:31 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "libft.h"
 # include "ft_printf.h"
 # include "pipex.h"
+
+int	ft_test(void);
 /*
 /////////////////////////
 //	DEFINES

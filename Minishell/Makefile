@@ -6,7 +6,7 @@
 #    By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 17:12:24 by zharzi            #+#    #+#              #
-#    Updated: 2022/11/09 20:40:18 by zharzi           ###   ########.fr        #
+#    Updated: 2022/11/10 14:41:35 by zharzi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,9 +29,9 @@ CC = clang
 
 FLAGS = -Wall -Wextra -Werror -g3
 
-IFLAG = -I$(HEADERDIR) -Ift_printf/includes/ -Ilibft/includes/
+IFLAG = -I$(HEADERDIR) -Ift_printf/includes/ -Ilibft/includes/ -Ipipex/includes/
 
-all : libft.a libft_printf.a libpipex.a $(BINARY)
+all : libft.a libft_printf.a libpipex.a libminishell.a $(BINARY)
 
 $(BINARY):
 	$(CC) $(FLAGS) main.c $(IFLAG) -L. -lminishell -L./pipex -lpipex \
