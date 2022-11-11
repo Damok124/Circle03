@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlarraze <tlarraze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 14:39:50 by tlarraze          #+#    #+#             */
-/*   Updated: 2022/11/10 14:57:55 by tlarraze         ###   ########.fr       */
+/*   Updated: 2022/11/11 12:21:32 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include <minishell.h>
 
-int	main(void)
+int	test(void)
 {
-	char	*str;
+	// char	*str;
 
-	str = readline("Minishell:>");
-	printf("%s", str);
+	// str = readline("Minishell:>");
+	// printf("%s", str);
 	return (0);
 }
+

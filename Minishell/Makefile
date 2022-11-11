@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tlarraze <tlarraze@student.42.fr>          +#+  +:+       +#+         #
+#    By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 17:12:24 by zharzi            #+#    #+#              #
-#    Updated: 2022/11/10 16:02:31 by tlarraze         ###   ########.fr        #
+#    Updated: 2022/11/11 12:20:25 by zharzi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ BINARY = minishell
 SRCSDIR = ./srcs/
 
 SRCS = \
-${SRCSDIR}test.c
+${SRCSDIR}test.c \
+${SRCSDIR}ft_zied.c
 
 HEADERDIR = includes/
 
