@@ -6,7 +6,7 @@
 #    By: tlarraze <tlarraze@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 17:12:24 by zharzi            #+#    #+#              #
-#    Updated: 2022/11/10 16:02:31 by tlarraze         ###   ########.fr        #
+#    Updated: 2022/11/11 16:01:18 by tlarraze         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ BINARY = minishell
 SRCSDIR = ./srcs/
 
 SRCS = \
-${SRCSDIR}test.c
+${SRCSDIR}env.c \
+${SRCSDIR}built_in.c \
 
 HEADERDIR = includes/
 

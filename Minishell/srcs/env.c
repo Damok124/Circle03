@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlarraze <tlarraze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/10 14:39:50 by tlarraze          #+#    #+#             */
-/*   Updated: 2022/11/10 14:57:55 by tlarraze         ###   ########.fr       */
+/*   Created: 2022/11/11 12:12:18 by tlarraze          #+#    #+#             */
+/*   Updated: 2022/11/11 12:21:21 by tlarraze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "minishell.h"
 
-int	main(void)
+//get the USERNAME in the environment and return it
+char    *ft_get_username(char **env)
 {
-	char	*str;
+    char    *username;
+    int     i;
 
-	str = readline("Minishell:>");
-	printf("%s", str);
-	return (0);
+    i = 0;
+    while (ft_strncmp(env[i], "USER=", 5) != 0)
+        i++;
+    username = ft_strjoin(env[i] + 5, ":~$");
+    return (username);
 }

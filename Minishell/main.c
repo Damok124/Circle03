@@ -6,56 +6,48 @@
 /*   By: tlarraze <tlarraze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 11:56:10 by tlarraze          #+#    #+#             */
-/*   Updated: 2022/11/11 11:57:37 by tlarraze         ###   ########.fr       */
+/*   Updated: 2022/11/11 17:56:59 by tlarraze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*Prompt;
+char	*g_prompt;
 
-void	handler(int	num)
+void	handler(int num)
 {
-	if (num == SIGINT)
-	{
-		write(STDOUT_FILENO, "\n", 1);
-		write(STDOUT_FILENO, Prompt, ft_strlen(Prompt));
-	}
-	if (num == SIGQUIT)
-	{
-		write(STDOUT_FILENO, "exit\n", 5);
-		exit(0);
-	}
+	write(STDOUT_FILENO, "\n", 1);
+	write(STDOUT_FILENO, g_prompt, ft_strlen(g_prompt));
 	(void)num;
 }
 
 int	main(int argc, char **argv, char **env)
 {
-	char	*str;
-	struct stat sb;
+	char		*str;
+	struct stat	sb;
 
 	signal(SIGINT, handler);
-	signal(SIGQUIT, handler);
-	Prompt = ft_strjoin(env[13] + 5, ":~$");
+	signal(SIGQUIT, SIG_IGN);
+	g_prompt = ft_get_username(env);
 	while (1)
 	{
 		stat("pipex", &sb);
-		
-		str = readline(Prompt);
+		str = readline(g_prompt);
 		add_history(str);
-		if (str != NULL || ft_strncmp(str, "\0\0\0", 5) == 0)
-			printf("%s\n", str);
+		if (ft_strncmp(str, "echo", 4) == 0)
+			ft_echo(ft_split(str, ' '), env);
+		if (ft_strncmp(str, "cd", 2) == 0)
+			ft_cd(ft_split(str, ' '), env);
+		if (ft_strncmp(str, "pwd", 3) == 0)
+			ft_pwd(ft_split(str, ' '));
 		if (ft_strncmp(str, "exit", 5) == 0)
 			exit(0);
 		free(str);
-		//rl_redisplay();
-		//printf("%lu\n", sb.st_);
-		//printf("%lu\n", sb.st_blksize);
-		//printf("%lu\n", sb.st_nlink);
-		//printf("%lu\n", sb.st_dev);
-		//rl_clear_history();
 		if (str == NULL)
-			break;
+		{
+			printf("exit");
+			break ;
+		}
 	}
 	(void)argc;
 	(void)argv;
