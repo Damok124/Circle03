@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlarraze <tlarraze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/08 06:22:33 by zharzi            #+#    #+#             */
-/*   Updated: 2022/11/11 11:49:13 by tlarraze         ###   ########.fr       */
+/*   Created: 2022/11/11 11:56:10 by tlarraze          #+#    #+#             */
+/*   Updated: 2022/11/11 11:57:37 by tlarraze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ int	main(int argc, char **argv, char **env)
 	return (0);
 }
 
-/* int	main(void)
+/*void	ft_zied(void)
 {
-	char	*str;
+	char	*cmdline;
 	int		fd;
 
 	fd = open("cmdline", O_RDONLY);
-	str = get_next_line(fd);
-	ft_printf("%s", str);
+	cmdline = get_next_line(fd);
+	ft_printf("%s", cmdline);
+	ft_minishell_parsing(cmdline);
 	close(fd);
-	return (0);
-} */
+}*/
