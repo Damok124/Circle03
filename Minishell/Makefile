@@ -6,7 +6,7 @@
 #    By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 17:12:24 by zharzi            #+#    #+#              #
-#    Updated: 2022/11/11 12:20:25 by zharzi           ###   ########.fr        #
+#    Updated: 2022/11/11 18:10:59 by zharzi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,8 @@ SRCSDIR = ./srcs/
 
 SRCS = \
 ${SRCSDIR}test.c \
+${SRCSDIR}env.c \
+${SRCSDIR}built_in.c \
 ${SRCSDIR}ft_zied.c
 
 HEADERDIR = includes/

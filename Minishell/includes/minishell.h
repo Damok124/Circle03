@@ -6,7 +6,7 @@
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 12:11:56 by zharzi            #+#    #+#             */
-/*   Updated: 2022/11/11 16:12:29 by zharzi           ###   ########.fr       */
+/*   Updated: 2022/11/11 18:12:07 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 int		ft_test(void);
 char	***ft_zied(char **env);
+
 /*
 /////////////////////////
 //	DEFINES
@@ -61,6 +62,25 @@ t_data	ft_init_data(int ac, char **argv, char **env);
 char	**ft_parse_cmd(char *arg);
 void	ft_cmd_not_found(char *str);
 void	ft_print_cmderr(char **validpaths, char **argv);
+
+/////////////////////////
+//	PROMPT
+/////////////////////////
+
+*/
+char	*ft_get_username(char **env);
+/*
+
+/////////////////////////
+//	BUILD IN
+/////////////////////////
+
+*/
+void	ft_echo(char **str, char **env);
+void	ft_echo_n(char **str, char **env);
+void	ft_cd(char **str, char **env);
+void	ft_pwd(char **str);
+/*
 
 /////////////////////////
 //	TESTS
