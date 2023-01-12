@@ -1,0 +1,10 @@
+(char **)blocks->src		:
+(char **)blocks->src_trans	:
+
+typedef struct s_page {
+	char			**cmds;
+	char			**infiles;
+	char			**outfiles;
+	struct s_page	*next;
+}					t_page;
+

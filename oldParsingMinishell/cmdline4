@@ -1,0 +1,1 @@
+echo $lol >$lol<<$lol | echo '>$lol'
