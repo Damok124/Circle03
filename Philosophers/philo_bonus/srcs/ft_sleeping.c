@@ -1,37 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*   ft_sleeping.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/10 15:34:45 by zharzi            #+#    #+#             */
-/*   Updated: 2023/01/17 22:57:17 by zharzi           ###   ########.fr       */
+/*   Created: 2023/01/17 23:41:47 by zharzi            #+#    #+#             */
+/*   Updated: 2023/01/17 23:42:35 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	main(int ac, char **argv)
+void	ft_sleeping(t_philo *philo, int *forks)
 {
-	t_context	*context;
-	t_philo		*philos;
-
-	philos = NULL;
-	context = (t_context *)malloc(sizeof(t_context));
-	if (!context)
-		return (0);
-	if (ft_check_args(ac - 1, argv + 1))
+	if (ft_action_if_alive(philo))
 	{
-		ft_init_context(context, argv + 1, ac -1);
-		philos = ft_init_tab_philo(context);
-		if (philos)
-			ft_philo(philos, context);
-		else
-			printf("FAILURE\n");
+		if (*forks > 2)
+		{
+			sem_post(philo->context->sem_forks);
+			*forks -= 2;
+		}
+		if (*forks > 0)
+		{
+			sem_post(philo->context->sem_forks);
+			*forks -= 1;
+		}
+			ft_print_msg(philo, "is sleeping");
+			ft_usleep(philo, philo->context->rest_time);
 	}
 	else
-		printf("Wrong arguments.\n");
-	ft_unset_context(context);
-	return (EXIT_SUCCESS);
+		usleep(1000000);
 }

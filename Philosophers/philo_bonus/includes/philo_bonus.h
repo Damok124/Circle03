@@ -6,25 +6,30 @@
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 15:33:15 by zharzi            #+#    #+#             */
-/*   Updated: 2022/12/24 00:13:01 by zharzi           ###   ########.fr       */
+/*   Updated: 2023/01/17 23:32:40 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_BONUS_H
 # define PHILO_BONUS_H
 
-# include <string.h>
 # include <stdio.h>
-# include <stdarg.h>
-# include <stddef.h>
-# include <stdlib.h>
+# include <fcntl.h>
 # include <limits.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <signal.h>
 # include <sys/time.h>
-# include <pthread.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <semaphore.h>
 
 typedef struct s_context {
+	sem_t			*sem_forks;
+	sem_t			*sem_printf;
+	sem_t			*sem_over;
+	sem_t			*sem_full;
+	sem_t			*sem_meal;
 	int				members;
 	int				life_time;
 	int				meal_time;
@@ -33,17 +38,14 @@ typedef struct s_context {
 }					t_context;
 
 typedef struct s_philo {
-	pthread_t		philo;
+	pid_t			pid;
 	int				id;
-	pthread_mutex_t	life;
+	sem_t			*life;
 	int				alive;
 	int				meals;
 	long int		deadline;
 	struct timeval	start_time;
-	pthread_mutex_t	right;
-	pthread_mutex_t	*left;
-	pthread_mutex_t	*mut_printf;
-	t_context		context;
+	t_context		*context;
 }					t_philo;
 
 /////////////////////////
@@ -51,18 +53,19 @@ typedef struct s_philo {
 /////////////////////////
 int			ft_isdigit(int c);
 int			ft_atoi_safe(const char *nptr, int *check);
-void		ft_true_free(void **ptr);
+char		*ft_itoa(int n);
 int			ft_get_chrono(struct timeval start);
-void		ft_print_msg(t_philo *philo, char *msg);
 void		ft_print_last_msg(t_philo *philo, char *msg);
-void		ft_usleep(t_philo *philo, int timer);
+void		ft_print_msg(t_philo *philo, char *msg);
+void		ft_true_free(void **ptr);
+void		ft_sem_close(sem_t* sem, char *sem_name);
 
 /////////////////////////
 //	PARSERS
 /////////////////////////
-int			ft_check_args(int ac, char **argv);
 int			ft_check_arg_positive(char *arg);
 int			ft_check_arg_overflow(char *arg);
+int			ft_check_args(int ac, char **argv);
 
 /////////////////////////
 //	CHECKERS
@@ -73,28 +76,32 @@ int			ft_is_full_or_dead(t_philo *philo);
 /////////////////////////
 //	INITIALIZERS
 /////////////////////////
-t_context	ft_init_context(char **argv, int ac);
-t_philo		*ft_init_tab_philo(t_context context);
-void		ft_share_printf_mutex(t_philo *philos, pthread_mutex_t *mut_printf);
-void		ft_init_mutexes(t_philo *tab);
+t_context	*ft_init_context_sem(t_context *context);
+void		ft_init_context(t_context *context, char **argv, int ac);
+t_philo		*ft_init_tab_philo(t_context *context);
 
 /////////////////////////
 //	CORE
 /////////////////////////
+int			ft_action_if_alive(t_philo *philo);
 void		ft_grab_right(t_philo *philo, int *forks);
 void		ft_grab_left(t_philo *philo, int *forks);
-int			ft_eating(t_philo *philo);
+void		ft_usleep(t_philo *philo, int timer);
 void		ft_sleeping(t_philo *philo, int *forks);
+void		ft_die_alone(t_philo *philo);
+int			ft_eating(t_philo *philo);
 void		ft_thinking(t_philo *philo);
-void		*ft_routine(void *arg);
-void		ft_put_thread_on_routine(t_philo *tab);
-void		*ft_soul_taking(void *arg);
-void		ft_philo(t_philo *philos);
+void		ft_routine(void *arg);
+void		ft_put_processes_on_routine(t_philo *tab, t_context *context);
+void		ft_soul_waiting(t_philo *philo);
+void		ft_wait_last_plate(t_philo *philo);
+void		ft_philo(t_philo *philos, t_context *context);
 
 /////////////////////////
 //	EXIT
 /////////////////////////
-void		ft_join_them_all(t_philo *tab);
+void		ft_kill_them_all(t_philo *tab);
 void		ft_unset_philos(t_philo *tab);
+void		ft_unset_context(t_context *context);
 
 #endif

@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*   ft_check_arg_positive.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/10 15:34:45 by zharzi            #+#    #+#             */
-/*   Updated: 2023/01/17 22:57:17 by zharzi           ###   ########.fr       */
+/*   Created: 2023/01/17 23:41:03 by zharzi            #+#    #+#             */
+/*   Updated: 2023/01/17 23:42:17 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	main(int ac, char **argv)
+int	ft_check_arg_positive(char *arg)
 {
-	t_context	*context;
-	t_philo		*philos;
+	int	i;
 
-	philos = NULL;
-	context = (t_context *)malloc(sizeof(t_context));
-	if (!context)
+	i = 0;
+	if (arg[i] == '+')
+		i++;
+	if (!ft_isdigit(arg[i]))
 		return (0);
-	if (ft_check_args(ac - 1, argv + 1))
-	{
-		ft_init_context(context, argv + 1, ac -1);
-		philos = ft_init_tab_philo(context);
-		if (philos)
-			ft_philo(philos, context);
-		else
-			printf("FAILURE\n");
-	}
-	else
-		printf("Wrong arguments.\n");
-	ft_unset_context(context);
-	return (EXIT_SUCCESS);
+	while (ft_isdigit(arg[i]))
+		i++;
+	if (arg[i])
+		return (0);
+	return (1);
 }
