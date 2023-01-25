@@ -6,7 +6,7 @@
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 08:01:28 by zharzi            #+#    #+#             */
-/*   Updated: 2023/01/25 17:06:40 by zharzi           ###   ########.fr       */
+/*   Updated: 2023/01/25 18:56:16 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1331,6 +1331,44 @@ void	ft_show_lst_twins(t_twins *lst)//done
 	}
 }
 
+// void	ft_lst_remove_quotes(char **src, char **trans, int i)//done
+// {
+// 	int	j;
+
+// 	j = 0;
+// 	while (trans[i][j])
+// 	{
+// 		if (ft_isquotes(trans[i][j]))
+// 		{
+// 			while (trans[i][j])
+// 			{
+// 				trans[i][j] = trans[i][j + 1];
+// 				src[i][j] = src[i][j + 1];
+// 				j++;
+// 			}
+// 			j = -1;
+// 		}
+// 		j++;
+// 	}
+// }
+
+// void	ft_lst_clean_quotes(t_twins *lst)//done
+// {
+// 	int		i;
+
+// 	i = 0;
+// 	while (lst)
+// 	{
+// 		while (lst->trans[i])
+// 		{
+// 			ft_lst_remove_quotes(lst->src, lst->trans, i);
+// 			i++;
+// 		}
+// 		i = 0;
+// 		lst = lst->next;
+// 	}
+// }
+
 void	ft_lst_remove_quotes(char **src, char **trans, int i)//done
 {
 	int	j;
@@ -1412,6 +1450,8 @@ void	ft_trans_to_symbol(char **src, char **trans)
 			}
 		}
 		trans[i][j + 1] = '\0';
+		if (trans[i][j] == '\'' || trans[i][j] == '\"')
+			trans[i][j] = '0';
 		j = 0;
 		i++;
 	}
@@ -1745,6 +1785,24 @@ void	ft_redir_to_clean(char **src, char **trans)
 	}
 }
 
+void	ft_new(t_twins *lst)
+{
+	int	i;
+
+	i = 0;
+	while (lst)
+	{
+		while (lst->trans[i] && lst->src[i])
+		{
+			if (!lst->trans[i][0] && !lst->src[i][0])
+				lst->trans[i][0] = '0';
+			i++;
+		}
+		i = 0;
+		lst = lst->next;
+	}
+}
+
 t_parsed	*ft_minishell_parsing(char *str1)
 {
 	t_parsed	*final;
@@ -1774,8 +1832,11 @@ t_parsed	*ft_minishell_parsing(char *str1)
 		ft_lst_clean_quotes(lst);
 		ft_show_lst_twins(lst);
 		printf("\nPOWER\n");
+		ft_new(lst);
 		ft_lst_trans_symbol(lst);
 		ft_show_lst_twins(lst);
+		ft_lst_clean_quotes(lst);/////////////////
+		ft_show_lst_twins(lst);///////////////////
 		ft_lst_to_final(lst, final);
 	}
 	//ft_show_twins(origin);
