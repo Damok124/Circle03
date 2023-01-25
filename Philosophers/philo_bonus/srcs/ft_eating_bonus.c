@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_eating.c                                        :+:      :+:    :+:   */
+/*   ft_eating_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 23:41:09 by zharzi            #+#    #+#             */
-/*   Updated: 2023/01/17 23:42:20 by zharzi           ###   ########.fr       */
+/*   Updated: 2023/01/18 13:22:34 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ int	ft_eating(t_philo *philo)
 		ft_print_msg(philo, "is eating");
 		ft_usleep(philo, philo->context->meal_time);
 		sem_wait(philo->life);
-		philo->meals++;
-		if (philo->meals == philo->context->meals_max)
+		if (++philo->meals == philo->context->meals_max)
 			sem_post(philo->context->sem_full);
 		sem_post(philo->life);
 	}

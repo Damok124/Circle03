@@ -1,40 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_routine.c                                       :+:      :+:    :+:   */
+/*   ft_soul_taking.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/20 21:02:59 by zharzi            #+#    #+#             */
-/*   Updated: 2023/01/18 13:12:43 by zharzi           ###   ########.fr       */
+/*   Created: 2022/12/20 21:03:05 by zharzi            #+#    #+#             */
+/*   Updated: 2023/01/16 00:42:03 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*ft_routine(void *arg)
+void	*ft_soul_taking(void *arg)
 {
 	t_philo	*philo;
-	int		forks;
+	int		all_full;
+	int		i;
 
-	forks = 0;
+	i = 0;
+	all_full = 0;
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0 || (philo->id % 2 != 0 \
-		&& philo->id == (philo->context.members)))
+	while (!ft_is_dead(&philo[i]))
 	{
-		if (!ft_is_expired(philo))
-			ft_print_msg(philo, "is thinking");
-		usleep(6000);
+		ft_is_full(&philo[i], &all_full);
+		if (all_full >= philo->context.members)
+			break ;
+		i = (i + 1) % philo->context.members;
+		usleep(10);
 	}
-	while (!ft_is_dead(philo) && !ft_is_expired(philo))
+	if (ft_is_expired(&philo[i]))
+		ft_print_last_msg(&philo[i], "died");
+	i = -1;
+	while (++i < philo->context.members)
 	{
-		forks = ft_eating(philo);
-		if (philo->context.members == 1)
-			usleep(1000);
-		ft_sleeping(philo, &forks);
-		if (philo->context.members == 1)
-			usleep(1000);
-		ft_thinking(philo);
+		pthread_mutex_lock(&philo[i].life);
+		philo[i].alive = 0;
+		pthread_mutex_unlock(&philo[i].life);
 	}
 	return (NULL);
 }

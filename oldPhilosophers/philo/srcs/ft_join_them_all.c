@@ -1,34 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sleeping.c                                      :+:      :+:    :+:   */
+/*   ft_join_them_all.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 23:41:47 by zharzi            #+#    #+#             */
-/*   Updated: 2023/01/17 23:42:35 by zharzi           ###   ########.fr       */
+/*   Created: 2022/12/20 21:02:48 by zharzi            #+#    #+#             */
+/*   Updated: 2022/12/20 21:09:01 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "philo.h"
 
-void	ft_sleeping(t_philo *philo, int *forks)
+void	ft_join_them_all(t_philo *tab)
 {
-	if (ft_action_if_alive(philo))
-	{
-		if (*forks > 2)
-		{
-			sem_post(philo->context->sem_forks);
-			*forks -= 2;
-		}
-		if (*forks > 0)
-		{
-			sem_post(philo->context->sem_forks);
-			*forks -= 1;
-		}
-			ft_print_msg(philo, "is sleeping");
-			ft_usleep(philo, philo->context->rest_time);
-	}
-	else
-		usleep(1000000);
+	int	i;
+
+	i = -1;
+	while (++i < tab->context.members)
+		pthread_join(tab[i].philo, NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 08:01:28 by zharzi            #+#    #+#             */
-/*   Updated: 2022/12/10 10:25:13 by zharzi           ###   ########.fr       */
+/*   Updated: 2023/01/25 17:06:40 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1092,9 +1092,9 @@ void	ft_translation(char **src, char **trans)
 {
 	printf("after spaces focus\n");
 	ft_show_duo_strs(src, trans);
-	ft_replace_spaces(trans);
-	printf("after replace spaces\n");
-	ft_show_duo_strs(src, trans);
+	// ft_replace_spaces(trans);
+	// printf("after replace spaces\n");
+	// ft_show_duo_strs(src, trans);
 	ft_rename_angl_brackets(trans);
 	printf("after rename angl brackets\n");
 	ft_show_duo_strs(src, trans);
@@ -1369,7 +1369,30 @@ void	ft_lst_clean_quotes(t_twins *lst)//done
 	}
 }
 
-void	ft_trim_trans(char **src, char **trans)
+void	ft_replace_src_redir_symbols(char **src, char **trans, int i)
+{
+	char	*tmp;
+
+	tmp = NULL;
+	// if (ft_is_duo(trans[i]) || ft_is_solo(trans[i]))
+	// 	src[i][0] = ' ';
+	// if (ft_is_duo(trans[i]))
+	// 	src[i][1] = ' ';
+	if (ft_is_duo(trans[i]))
+	{
+		tmp = ft_strdup(src[i] + 2);
+		ft_true_free((void **)&src[i]);
+		src[i] = tmp;
+	}
+	else if (ft_is_solo(trans[i]))
+	{
+		tmp = ft_strdup(src[i] + 1);
+		ft_true_free((void **)&src[i]);
+		src[i] = tmp;
+	}
+}
+
+void	ft_trans_to_symbol(char **src, char **trans)
 {
 	int	i;
 	int	j;
@@ -1378,10 +1401,7 @@ void	ft_trim_trans(char **src, char **trans)
 	j = 0;
 	while (src && src[i] && trans && trans[i])
 	{
-		if (ft_is_duo(trans[i]) || ft_is_solo(trans[i]))
-			src[i][0] = ' ';
-		if (ft_is_duo(trans[i]))
-			src[i][1] = ' ';
+		ft_replace_src_redir_symbols(src, trans, i);
 		if (src[i][j] && trans[i][j] && trans[i][j] == '?')
 		{
 			while (src[i][j] && ft_strchr("<>", src[i][j]) && trans[i][j + 1])
@@ -1398,24 +1418,25 @@ void	ft_trim_trans(char **src, char **trans)
 	ft_rename_ambiguous_tag(trans);
 }
 
-void	ft_lst_clean_redirections(t_twins *lst)
+void	ft_lst_trans_symbol(t_twins *lst)///////////////////////////////
 {
 	char	*tmp;
-	int		i;
+	// int		i;
 
-	i = 0;
+	// i = 0;
 	tmp = NULL;
 	while (lst)
 	{
-		ft_trim_trans(lst->src, lst->trans);
-		while (lst->trans && lst->trans[i])
-		{
-			tmp = lst->src[i];
-			lst->src[i] = ft_strtrim(tmp, "\a\b\t\n\v\f\r ");
-			ft_true_free((void **)&tmp);
-			i++;
-		}
-		i = 0;
+		ft_trans_to_symbol(lst->src, lst->trans);
+		// while (lst->trans && lst->trans[i])
+		// {
+		// 	tmp = lst->src[i];
+		// 	// lst->src[i] = ft_strtrim(tmp, "\a\b\t\n\v\f\r ");
+		// 	lst->src[i] = ft_strdup(tmp);//abomination
+		// 	ft_true_free((void **)&tmp);
+		// 	i++;
+		// }
+		// i = 0;
 		lst = lst->next;
 	}
 }
@@ -1523,6 +1544,29 @@ void	ft_final_get_cmds(char **cmds, char **src, char **trans)//done
 	}
 }
 
+char	*ft_begin_strtrim(char const *s1, char const *set)//update libft
+{
+	char	*str;
+	ssize_t	i;
+	ssize_t	j;
+
+	i = 0;
+	j = ft_strlen(s1);
+	if (s1)
+	{
+		while (s1 && s1[i] && ft_strchr(set, s1[i]))
+			i++;
+		str = ft_strdup(s1 + i);
+		if (str)
+			return (str);
+	}
+	str = malloc(sizeof(char));
+	if (!str)
+		return (NULL);
+	str[0] = '\0';
+	return (str);
+}
+
 void	ft_final_get_redir(char **redir, char **src, char **trans)
 {
 	char	*tmp;
@@ -1536,7 +1580,9 @@ void	ft_final_get_redir(char **redir, char **src, char **trans)
 	{
 		if (ft_isredirection(trans[i]))
 		{
-			tmp = ft_strtrim(src[i], "\a\b\t\n\v\f\r ");
+			// tmp = ft_strtrim(src[i], "\a\b\t\n\v\f\r ");
+			// tmp = ft_begin_strtrim(src[i], "\a\b\t\n\v\f\r ");
+			tmp = ft_strdup(src[i]);
 			redir[j] = ft_strjoin(trans[i], tmp);
 			j++;
 			if (tmp)
@@ -1546,33 +1592,33 @@ void	ft_final_get_redir(char **redir, char **src, char **trans)
 	}
 }
 
-int	ft_check_if_empty(t_parsed *final)//done
-{
-	int	test;
-	int	i;
+// int	ft_check_if_empty(t_parsed *final)//done
+// {
+// 	int	test;
+// 	int	i;
 
-	i = 0;
-	test = 0;
-	if (final->cmds || final->redirections)
-	{
-		while (final->cmds && final->cmds[i])
-		{
-			if (final->cmds[i][0])
-				test++;
-			i++;
-		}
-		i = 0;
-		while (final->redirections && final->redirections[i])
-		{
-			if (final->redirections[i][1])
-				test++;
-			i++;
-		}
-	}
-	if (!test)
-		return (1);
-	return (0);
-}
+// 	i = 0;
+// 	test = 0;
+// 	if (final->cmds || final->redirections)
+// 	{
+// 		while (final->cmds && final->cmds[i])
+// 		{
+// 			if (final->cmds[i][0])
+// 				test++;
+// 			i++;
+// 		}
+// 		i = 0;
+// 		while (final->redirections && final->redirections[i])
+// 		{
+// 			if (final->redirections[i][1])
+// 				test++;
+// 			i++;
+// 		}
+// 	}
+// 	if (!test)
+// 		return (1);
+// 	return (0);
+// }
 
 void	ft_lst_to_final(t_twins *lst, t_parsed *final)//done
 {
@@ -1593,7 +1639,11 @@ void	ft_lst_to_final(t_twins *lst, t_parsed *final)//done
 			if (final->redirections)
 				ft_final_get_redir(final->redirections, lst->src, lst->trans);
 		}
-		final->empty = ft_check_if_empty(final);
+		final->empty = final->cmds_quant + final->redir_quant;
+		if (final->empty)
+			final->empty = 0;
+		else
+			final->empty = 1;
 		lst = lst->next;
 		final = final->next;
 	}
@@ -1639,6 +1689,62 @@ void	ft_label_src_into_trans(char **src, char **trans)///////////////////
 	}
 }
 
+char	**ft_split_at_index(char *str, int i)//deja dans la libft
+{
+	char	**final;
+	char	*first;
+	char	*last;
+
+	final = NULL;
+	if (str)
+	{
+		last = ft_strdup(str + i);
+		str[i] = '\0';
+		first = ft_strdup(str);
+		final = (char **)malloc(sizeof(char *) * 3);
+		if (!final)
+			return (NULL);
+		final[0] = first;
+		final[1] = last;
+		final[2] = NULL;
+	}
+	return (final);
+}
+
+void	ft_clean_redir(char **srcs, int	target, char *set)
+{
+	char	**strs;
+	char	*str;
+
+	strs = ft_split_at_index(srcs[0], target);
+	str = ft_begin_strtrim(strs[1], set);
+	ft_true_free((void **)&srcs[0]);
+	srcs[0] = ft_strjoin(strs[0], str);
+	ft_full_free((void **)strs);
+	ft_true_free((void **)&str);
+}
+
+void	ft_redir_to_clean(char **src, char **trans)
+{
+	int		i;
+
+	i = 0;
+	while (src && trans && src[0] && trans[0] && trans[0][i] && src[0][i])
+	{
+		if (ft_strchr("<>", trans[0][i]) && trans[0][i + 1] == ' ')
+		{
+			ft_clean_redir(trans, i + 1, " ");
+			ft_clean_redir(src, i + 1, "\a\b\t\n\v\f\r ");
+		}
+		if (ft_strchr("AH", trans[0][i]) && trans[0][i + 2] == ' ')
+		{
+			ft_clean_redir(trans, i + 2, " ");
+			ft_clean_redir(src, i + 2, "\a\b\t\n\v\f\r ");
+		}
+		i++;
+	}
+}
+
 t_parsed	*ft_minishell_parsing(char *str1)
 {
 	t_parsed	*final;
@@ -1649,13 +1755,16 @@ t_parsed	*ft_minishell_parsing(char *str1)
 	origin = ft_init_origin(NULL, str1);
 	lst = NULL;
 	ft_show_twins(origin);
+	printf("1\n");
 	ft_label_src_into_trans(origin->src, origin->trans);
 	ft_show_twins(origin);
+	printf("2\n");
 	if (origin->trans && origin->trans[0] && origin->trans[0][0] \
 		&& ft_check_syntax(origin->src, origin->trans))
 	{
 		ft_translation(origin->src, origin->trans);
 		ft_show_twins(origin);
+		ft_redir_to_clean(origin->src, origin->trans);
 		ft_split_on_pipes(origin);
 		ft_show_twins(origin);
 		lst = ft_init_lst_twins((int)ft_strslen(origin->trans));
@@ -1665,13 +1774,13 @@ t_parsed	*ft_minishell_parsing(char *str1)
 		ft_lst_clean_quotes(lst);
 		ft_show_lst_twins(lst);
 		printf("\nPOWER\n");
-		ft_lst_clean_redirections(lst);
+		ft_lst_trans_symbol(lst);
 		ft_show_lst_twins(lst);
 		ft_lst_to_final(lst, final);
 	}
 	//ft_show_twins(origin);
 	//ft_show_lst_twins(lst);
-	//ft_show_lst_parsed(final);
+	// ft_show_lst_parsed(final);
 	ft_free_twins(origin);
 	ft_free_twins(lst);
 	return (final);
@@ -1690,9 +1799,9 @@ int	main(void)
 
 	tmp = NULL;
 	name = ft_strdup("cmdline0");
-	i = -1;
-	while (++i < 5)
-	{
+	i = 0;//-1
+	// while (++i < 5)
+	// {
 		tmp = (char *)malloc(sizeof(char) * (200 + 1));
 		name[7] = i + 48;
 		fd = open(name, O_RDONLY);
@@ -1705,7 +1814,8 @@ int	main(void)
 		ft_show_lst_parsed(lst);
 		ft_free_parsed(lst);
 		printf("\n\n=====================================================\n\n");
-	}
+	// }
+	(void)i;
 	ft_true_free((void **)&name);
 	ft_close_stdfds();
 	return (0);
