@@ -6,7 +6,7 @@
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 08:01:28 by zharzi            #+#    #+#             */
-/*   Updated: 2023/01/25 18:56:16 by zharzi           ###   ########.fr       */
+/*   Updated: 2023/01/26 18:55:38 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -957,6 +957,24 @@ void	ft_remove_symbol_var_env(char **src, char **trans, int i)//done
 		trans[0][i] = '0';
 }
 
+void	ft_disable_unnamed_var_env(char **trans)
+{
+	int	i;
+	int	quotes;
+
+	i = 0;
+	quotes = 0;
+	while (trans && trans[0][i])
+	{
+		if (trans[0][i] == '\"')
+			quotes++;
+		if (trans[0][i] && trans[0][i] == '$' && trans[0][i + 1] \
+			&& trans[0][i + 1] == '\"' && (quotes % 2) != 0)
+			trans[0][i] = '0';
+		i++;
+	}
+}
+
 void	ft_disable_var_env(char **src, char **trans)//done
 {
 	char	*tmp;
@@ -981,6 +999,7 @@ void	ft_disable_var_env(char **src, char **trans)//done
 		}
 		i++;
 	}
+	ft_disable_unnamed_var_env(trans);
 }
 
 char	*ft_get_var_env_val(char *src)//done
@@ -1785,7 +1804,7 @@ void	ft_redir_to_clean(char **src, char **trans)
 	}
 }
 
-void	ft_new(t_twins *lst)
+void	ft_lst_nullbyte_chase(t_twins *lst)
 {
 	int	i;
 
@@ -1832,11 +1851,11 @@ t_parsed	*ft_minishell_parsing(char *str1)
 		ft_lst_clean_quotes(lst);
 		ft_show_lst_twins(lst);
 		printf("\nPOWER\n");
-		ft_new(lst);
+		ft_lst_nullbyte_chase(lst);
 		ft_lst_trans_symbol(lst);
 		ft_show_lst_twins(lst);
-		ft_lst_clean_quotes(lst);/////////////////
-		ft_show_lst_twins(lst);///////////////////
+		// ft_lst_clean_quotes(lst);/////////////////
+		// ft_show_lst_twins(lst);///////////////////
 		ft_lst_to_final(lst, final);
 	}
 	//ft_show_twins(origin);
