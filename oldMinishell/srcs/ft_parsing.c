@@ -6,7 +6,7 @@
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 08:01:28 by zharzi            #+#    #+#             */
-/*   Updated: 2023/01/26 18:55:38 by zharzi           ###   ########.fr       */
+/*   Updated: 2023/02/04 20:13:23 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -957,6 +957,19 @@ void	ft_remove_symbol_var_env(char **src, char **trans, int i)//done
 		trans[0][i] = '0';
 }
 
+void	ft_disable_no_name_var_env(char **trans)
+{
+	int	i;
+
+	i = 0;
+	while (trans && trans[0] && trans[0][i])
+	{
+		if (trans[0][i] == '$' && trans[0][i + 1] && trans[0][i + 1] == ' ')
+			trans[0][i] = '0';
+		i++;
+	}
+}
+
 void	ft_disable_unnamed_var_env(char **trans)
 {
 	int	i;
@@ -993,13 +1006,14 @@ void	ft_disable_var_env(char **src, char **trans)//done
 		{
 			tmp = NULL;
 			heredocs -= 1;
-			if (ft_strnstr(trans[0] + i + 2, "$", len  - (i + 2)))
+			if (ft_strnstr(trans[0] + i + 2, "$", len - (i + 2)))
 				ft_remove_symbol_var_env(src, trans, i + 2);
 			i++;
 		}
 		i++;
 	}
 	ft_disable_unnamed_var_env(trans);
+	ft_disable_no_name_var_env(trans);
 }
 
 char	*ft_get_var_env_val(char *src)//done
@@ -1136,7 +1150,10 @@ int	ft_check_syntax(char **src, char **trans)////////////////////////////////
 	if (!ft_check_format_quotes(trans[0], ft_strlen(trans[0])) \
 		|| !ft_check_format_angl_brackets(src[0], trans[0]) \
 			|| !ft_check_format_pipes(trans[0]))
+	{
+		write(2, "minishell : syntax error\n", 25);
 		return (0);
+	}
 	return (1);
 }
 
@@ -1879,9 +1896,9 @@ int	main(void)
 
 	tmp = NULL;
 	name = ft_strdup("cmdline0");
-	i = 0;//-1
-	// while (++i < 5)
-	// {
+	i = -1;//-1
+	while (++i < 5)
+	{
 		tmp = (char *)malloc(sizeof(char) * (200 + 1));
 		name[7] = i + 48;
 		fd = open(name, O_RDONLY);
@@ -1894,7 +1911,7 @@ int	main(void)
 		ft_show_lst_parsed(lst);
 		ft_free_parsed(lst);
 		printf("\n\n=====================================================\n\n");
-	// }
+	}
 	(void)i;
 	ft_true_free((void **)&name);
 	ft_close_stdfds();
