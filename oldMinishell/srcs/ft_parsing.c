@@ -6,7 +6,7 @@
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 08:01:28 by zharzi            #+#    #+#             */
-/*   Updated: 2023/02/04 20:13:23 by zharzi           ###   ########.fr       */
+/*   Updated: 2023/02/05 21:07:00 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -957,14 +957,14 @@ void	ft_remove_symbol_var_env(char **src, char **trans, int i)//done
 		trans[0][i] = '0';
 }
 
-void	ft_disable_no_name_var_env(char **trans)
+void	ft_disable_no_name_var_env(char **src, char **trans)
 {
 	int	i;
 
 	i = 0;
-	while (trans && trans[0] && trans[0][i])
+	while (src && trans && src[0] && trans[0] && src[0][i] && trans[0][i])
 	{
-		if (trans[0][i] == '$' && trans[0][i + 1] && trans[0][i + 1] == ' ')
+		if (trans[0][i] == '$' && trans[0][i + 1] && src[0][i + 1] && (trans[0][i + 1] == ' ' || ft_strchr("\a\b\t\n\v\f\r ", src[0][i + 1])))
 			trans[0][i] = '0';
 		i++;
 	}
@@ -1013,7 +1013,7 @@ void	ft_disable_var_env(char **src, char **trans)//done
 		i++;
 	}
 	ft_disable_unnamed_var_env(trans);
-	ft_disable_no_name_var_env(trans);
+	ft_disable_no_name_var_env(src, trans);
 }
 
 char	*ft_get_var_env_val(char *src)//done
@@ -1058,7 +1058,8 @@ void	ft_replace_with_val(char **src, char **trans, char *var, int i)//done
 	tmp = NULL;
 	if (src && src[0] && trans && trans[0] && var)
 	{
-		while (src[0][i] && src[0][i + j] && ft_isalnum(src[0][i + j]))
+		while (src[0][i] && src[0][i + j] \
+			&& (ft_isalnum(src[0][i + j]) || src[0][i + j] == '_'))
 			j++;
 		ft_compile_with_val(src, var, i, j);
 		tmp = ft_strdup(var);
