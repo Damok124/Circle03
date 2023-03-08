@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_init_context.c                                  :+:      :+:    :+:   */
+/*   ft_check_args.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zharzi <zharzi@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 23:41:17 by zharzi            #+#    #+#             */
-/*   Updated: 2023/01/17 23:42:24 by zharzi           ###   ########.fr       */
+/*   Created: 2023/01/17 23:41:05 by zharzi            #+#    #+#             */
+/*   Updated: 2023/01/17 23:42:18 by zharzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void ft_init_context(t_context *context, char **argv, int ac)
+int	ft_check_args(int ac, char **argv)
 {
-	int			check;
+	int	check;
+	int	i;
 
 	check = 1;
-	context->members = ft_atoi_safe(argv[0], &check);
-	context->life_time = ft_atoi_safe(argv[1], &check);
-	context->meal_time = ft_atoi_safe(argv[2], &check);
-	context->rest_time = ft_atoi_safe(argv[3], &check);
-	if (ac == 5)
-		context->meals_max = ft_atoi_safe(argv[4], &check);
-	else
-		context->meals_max = -1;
-	context = ft_init_context_sem(context);
+	i = 0;
+	if (ac < 4 || ac > 5)
+		return (0);
+	while (argv && argv[i])
+	{
+		if (!ft_check_arg_positive(argv[i]) || !ft_check_arg_overflow(argv[i]))
+			return (0);
+		if (ft_atoi_safe(argv[0], &check) < 1)
+			return (0);
+		i++;
+	}
+	return (1);
 }
