@@ -12,13 +12,13 @@
 
 #include "philo_bonus.h"
 
-void ft_handle_single_philo(t_philo *philo, int *forks)
+void	ft_handle_single_philo(t_philo *philo, int *forks)
 {
 	ft_die_alone(philo);
 	*forks = 0;
 }
 
-void ft_update_deadline(t_philo *philo)
+void	ft_update_deadline(t_philo *philo)
 {
 	sem_wait(philo->life);
 	philo->deadline = (long int)ft_get_chrono(philo->start_time)
@@ -26,7 +26,7 @@ void ft_update_deadline(t_philo *philo)
 	sem_post(philo->life);
 }
 
-void ft_eat(t_philo *philo)
+void	ft_eat(t_philo *philo)
 {
 	ft_print_msg(philo, "is eating");
 	ft_usleep(philo, philo->context->meal_time);
@@ -36,10 +36,11 @@ void ft_eat(t_philo *philo)
 	sem_post(philo->life);
 }
 
-int ft_eating(t_philo *philo)
+int	ft_eating(t_philo *philo)
 {
-	int forks = 0;
+	int	forks;
 
+	forks = 0;
 	sem_wait(philo->context->sem_meal);
 	ft_grab_right(philo, &forks);
 	if (philo->context->members > 1)
@@ -47,7 +48,7 @@ int ft_eating(t_philo *philo)
 	else
 	{
 		ft_handle_single_philo(philo, &forks);
-		return forks;
+		return (forks);
 	}
 	if (ft_action_if_alive(philo))
 		sem_post(philo->context->sem_meal);
@@ -56,5 +57,5 @@ int ft_eating(t_philo *philo)
 		ft_update_deadline(philo);
 		ft_eat(philo);
 	}
-	return forks;
+	return (forks);
 }

@@ -22,10 +22,10 @@ void	ft_routine(void *arg)
 	if (philo->context->members == 1)
 	{
 		ft_die_alone(philo);
-		return;
+		return ;
 	}
-	if (philo->id % 2 == 0 || (philo->id % 2 != 0
-		&& philo->id == (philo->context->members)))
+	if (philo->id % 2 == 0
+		|| (philo->id % 2 != 0 && philo->id == (philo->context->members)))
 	{
 		ft_print_msg(philo, "is thinking");
 		ft_usleep(philo, philo->context->meal_time);
