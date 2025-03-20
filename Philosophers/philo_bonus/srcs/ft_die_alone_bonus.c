@@ -14,6 +14,10 @@
 
 void	ft_die_alone(t_philo *philo)
 {
-	while (ft_action_if_alive(philo))
-		usleep(100);
+	ft_print_msg(philo, "has taken a fork");
+	usleep(philo->context->life_time * 1000);
+	ft_print_last_msg(philo, "died");
+	sem_post(philo->context->sem_over);
+	while (1)
+		usleep(1000000);
 }

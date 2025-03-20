@@ -19,7 +19,12 @@ void	ft_routine(void *arg)
 
 	forks = 0;
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0 || (philo->id % 2 != 0 \
+	if (philo->context->members == 1)
+	{
+		ft_die_alone(philo);
+		return;
+	}
+	if (philo->id % 2 == 0 || (philo->id % 2 != 0
 		&& philo->id == (philo->context->members)))
 	{
 		ft_print_msg(philo, "is thinking");
@@ -28,11 +33,7 @@ void	ft_routine(void *arg)
 	while (ft_action_if_alive(philo))
 	{
 		forks = ft_eating(philo);
-		if (philo->context->members == 1)
-			usleep(1000);
 		ft_sleeping(philo, &forks);
-		if (philo->context->members == 1)
-			usleep(1000);
 		ft_thinking(philo);
 	}
 	while (1)

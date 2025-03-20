@@ -20,6 +20,4 @@ void	ft_print_last_msg(t_philo *philo, char *msg)
 	sem_wait(philo->context->sem_printf);
 	printf("%i %i %s\n", time, philo->id, msg);
 	sem_post(philo->context->sem_over);
-	while (1)
-		usleep(1000000);
 }
